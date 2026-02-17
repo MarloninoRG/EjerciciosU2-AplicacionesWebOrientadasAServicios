@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Hub - Marlon's Apps</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .app-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease backwards;
+        }
+        
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .app-card:hover::before {
+            left: 100%;
+        }
+        
+        .app-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+        }
+        
+        .app-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+        
+        .app-card:hover .app-icon {
+            animation: spin 0.6s ease;
+        }
+        
+        .app-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        
+        .app-description {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        /* Colores específicos para cada app */
+        .app-card.spotify { 
+            background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%); 
+            color: white;
+        }
+        .app-card.spotify .app-name,
+        .app-card.spotify .app-description { color: white; }
+        
+        .app-card.peliculas { 
+            background: linear-gradient(135deg, #E50914 0%, #f6121d 100%); 
+            color: white;
+        }
+        .app-card.peliculas .app-name,
+        .app-card.peliculas .app-description { color: white; }
+        
+        .app-card.clima { 
+            background: linear-gradient(135deg, #56CCF2 0%, #2F80ED 100%); 
+            color: white;
+        }
+        .app-card.clima .app-name,
+        .app-card.clima .app-description { color: white; }
+        
+        .app-card.github { 
+            background: linear-gradient(135deg, #24292e 0%, #1a1d20 100%); 
+            color: white;
+        }
+        .app-card.github .app-name,
+        .app-card.github .app-description { color: white; }
+        
+        .app-card.reddit { 
+            background: linear-gradient(135deg, #FF4500 0%, #ff5722 100%); 
+            color: white;
+        }
+        .app-card.reddit .app-name,
+        .app-card.reddit .app-description { color: white; }
+        
+        .app-card.divisas { 
+            background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%); 
+            color: white;
+        }
+        .app-card.divisas .app-name,
+        .app-card.divisas .app-description { color: white; }
+        
+        .app-card.libros { 
+            background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); 
+            color: white;
+        }
+        .app-card.libros .app-name,
+        .app-card.libros .app-description { color: white; }
+        
+        .app-card.lugares { 
+            background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%); 
+            color: white;
+        }
+        .app-card.lugares .app-name,
+        .app-card.lugares .app-description { color: white; }
+        
+        .app-card.productos { 
+            background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%); 
+            color: white;
+        }
+        .app-card.productos .app-name,
+        .app-card.productos .app-description { color: white; }
+        
+        .app-card.chat { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white;
+        }
+        .app-card.chat .app-name,
+        .app-card.chat .app-description { color: white; }
+        
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            color: white;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Animación escalonada para las tarjetas */
+        .app-card:nth-child(1) { animation-delay: 0.1s; }
+        .app-card:nth-child(2) { animation-delay: 0.2s; }
+        .app-card:nth-child(3) { animation-delay: 0.3s; }
+        .app-card:nth-child(4) { animation-delay: 0.4s; }
+        .app-card:nth-child(5) { animation-delay: 0.5s; }
+        .app-card:nth-child(6) { animation-delay: 0.6s; }
+        .app-card:nth-child(7) { animation-delay: 0.7s; }
+        .app-card:nth-child(8) { animation-delay: 0.8s; }
+        .app-card:nth-child(9) { animation-delay: 0.9s; }
+        .app-card:nth-child(10) { animation-delay: 1.0s; }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .app-card {
+                padding: 25px;
+            }
+            
+            .app-icon {
+                font-size: 4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 API Hub</h1>
+            <p class="subtitle">Marlon es el mejor desarrollador - Colección completa de Apps</p>
+        </header>
+        
+        <div class="apps-grid">
+            <a href="/spotify" class="app-card spotify">
+                <span class="app-icon">🎵</span>
+                <div class="app-name">Spotify</div>
+                <div class="app-description">Busca canciones, artistas, álbumes y playlists. Escucha previews y descubre nueva música.</div>
+            </a>
+            
+            <a href="/peliculas" class="app-card peliculas">
+                <span class="app-icon">🎬</span>
+                <div class="app-name">Películas</div>
+                <div class="app-description">Explora películas, ve trailers, reparto, reseñas y recomendaciones personalizadas.</div>
+            </a>
+            
+            <a href="/clima" class="app-card clima">
+                <span class="app-icon">🌤️</span>
+                <div class="app-name">Clima</div>
+                <div class="app-description">Consulta el clima actual de tu ubicación con datos en tiempo real.</div>
+            </a>
+            
+            <a href="/divisas" class="app-card divisas">
+                <span class="app-icon">💱</span>
+                <div class="app-name">Divisas</div>
+                <div class="app-description">Convierte entre diferentes monedas con tasas de cambio actualizadas.</div>
+            </a>
+            
+            <a href="/github" class="app-card github">
+                <span class="app-icon">💻</span>
+                <div class="app-name">GitHub</div>
+                <div class="app-description">Busca usuarios, repositorios y explora proyectos open source populares.</div>
+            </a>
+            
+            <a href="/libros" class="app-card libros">
+                <span class="app-icon">📚</span>
+                <div class="app-name">Libros</div>
+                <div class="app-description">Busca libros, autores, reseñas y encuentra tu próxima lectura favorita.</div>
+            </a>
+            
+            <a href="/lugares" class="app-card lugares">
+                <span class="app-icon">📍</span>
+                <div class="app-name">Lugares</div>
+                <div class="app-description">Encuentra restaurantes, hospitales, tiendas y servicios cerca de ti.</div>
+            </a>
+            
+            <a href="/productos" class="app-card productos">
+                <span class="app-icon">🛍️</span>
+                <div class="app-name">Productos</div>
+                <div class="app-description">Administra tu inventario de productos con CRUD completo y SQLite.</div>
+            </a>
+            
+            <a href="/reddit" class="app-card reddit">
+                <span class="app-icon">🤖</span>
+                <div class="app-name">Reddit</div>
+                <div class="app-description">Explora posts trending, busca en subreddits y mantente al día con la comunidad.</div>
+            </a>
+            
+            <a href="/chat" class="app-card chat">
+                <span class="app-icon">💬</span>
+                <div class="app-name">Chat</div>
+                <div class="app-description">Chat en tiempo real con Firebase. Conecta con otros usuarios al instante.</div>
+            </a>
+        </div>
+        
+        <footer>
+            <p>✨ Desarrollado con ❤️ por Marlon - El Mejor Desarrollador</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Todas las APIs integradas en una sola aplicación Flask</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Efecto parallax suave en el scroll
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.app-card');
+            cards.forEach((card, index) => {
+                const speed = (index % 3 + 1) * 0.1;
+                const yPos = window.pageYOffset * speed;
+                card.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+        
+        // Animación de hover en el cursor
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body>
+</html>
